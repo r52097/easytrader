@@ -132,6 +132,7 @@ class ClientTrader(IClientTrader):
         self._toolbar = self._main.child_window(class_name="ToolbarWindow32")
 
     def _get_balance_from_statics(self):
+        self.wait(1)
         result = {}
         for key, control_id in self._config.BALANCE_CONTROL_ID_GROUP.items():
             result[key] = float(
@@ -346,6 +347,23 @@ class ClientTrader(IClientTrader):
 
         return self._handle_pop_dialogs()
 
+    def auto_cb(self):
+        self._switch_left_menus(self._config.AUTO_CB_MENU_PATH)
+
+        stock_list = self._get_grid_data(self._config.COMMON_GRID_CONTROL_ID)
+
+        if len(stock_list) == 0:
+            return {"message": "今日无新转债"}
+        invalid_list_idx = [
+            i for i, v in enumerate(stock_list) if v[self.config.AUTO_CB_NUMBER] <= 0
+        ]
+
+        if len(stock_list) == len(invalid_list_idx):
+            return {"message": "没有发现可以申购的新转债"}
+
+        for cb in stock_list:
+            self.trade(cb[self.config.AUTO_CB_SECURITY], cb[self.config.AUTO_CB_PRICE], cb[self.config.AUTO_CB_NUMBER])
+
     def _click_grid_by_row(self, row):
         x = self._config.COMMON_GRID_LEFT_MARGIN
         y = (
@@ -520,7 +538,7 @@ class ClientTrader(IClientTrader):
     def _switch_left_menus(self, path, sleep=0.2):
         self.close_pop_dialog()
         self._get_left_menus_handle().get_item(path).select()
-        self._app.top_window().type_keys('{ESC}')
+        # self._app.top_window().type_keys('{ESC}')
         self._app.top_window().type_keys('{F5}')
         self.wait(sleep)
 
