@@ -63,10 +63,10 @@ def use(broker, debug=False, **kwargs):
 
         return GFClientTrader()
 
-    if broker.lower() in ["gl_client", "国联证券客户端"]:
-        from easytrader.gl_clienttrader import GLClientTrader
+    if broker.lower() in ["universal_client", "通用同花顺客户端"]:
+        from easytrader.universal_clienttrader import UniversalClientTrader
 
-        return GLClientTrader()
+        return UniversalClientTrader()
 
     if broker.lower() in ["ths", "同花顺客户端"]:
         from .clienttrader import ClientTrader

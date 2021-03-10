@@ -14,8 +14,8 @@ def create(broker):
         return WK
     if broker == "htzq":
         return HTZQ
-    if broker == "gl":
-        return GL
+    if broker == "universal":
+        return UNIVERSAL
     raise NotImplementedError
 
 
@@ -184,8 +184,8 @@ class HTZQ(CommonConfig):
     AUTO_IPO_NUMBER = '可申购数量'
 
 
-class GL(CommonConfig):
-    DEFAULT_EXE_PATH = r"c:\\国联证券委托\\xiadan.exe"
+class UNIVERSAL(CommonConfig):
+    DEFAULT_EXE_PATH = r"c:\\ths\\xiadan.exe"
 
     BALANCE_CONTROL_ID_GROUP = {
         "资金余额": 1012,
