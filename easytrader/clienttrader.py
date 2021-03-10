@@ -132,7 +132,7 @@ class ClientTrader(IClientTrader):
         self._toolbar = self._main.child_window(class_name="ToolbarWindow32")
 
     def _get_balance_from_statics(self):
-        self.wait(1)
+        self.wait(3) # ??? change wait to exception
         result = {}
         for key, control_id in self._config.BALANCE_CONTROL_ID_GROUP.items():
             result[key] = float(
@@ -377,7 +377,7 @@ class ClientTrader(IClientTrader):
 
     @perf_clock
     def is_exist_pop_dialog(self):
-        self.wait(0.5)  # wait dialog display
+        self.wait(3)  # wait dialog display # ??? enlarge wait time
         try:
             return (
                 self._main.wrapper_object() != self._app.top_window().wrapper_object()
@@ -415,13 +415,13 @@ class ClientTrader(IClientTrader):
         self._app.kill()
 
     def _close_prompt_windows(self):
-        self.wait(1)
+        self.wait(5)
         for window in self._app.windows(class_name="#32770", visible_only=True):
             title = window.window_text()
             if title != self._config.TITLE:
-                logging.info("close " + title)
+                # logging.info("close " + title)
                 window.close()
-                self.wait(0.2)
+                self.wait(1)
         self.wait(1)
 
     def close_pormpt_window_no_wait(self):
@@ -535,7 +535,7 @@ class ClientTrader(IClientTrader):
             item.collapse()
 
     @perf_clock
-    def _switch_left_menus(self, path, sleep=0.2):
+    def _switch_left_menus(self, path, sleep=0.2): # sleep=1): # ??? no need to change here
         self.close_pop_dialog()
         self._get_left_menus_handle().get_item(path).select()
         # self._app.top_window().type_keys('{ESC}')
@@ -585,6 +585,7 @@ class ClientTrader(IClientTrader):
         handler = handler_class(self._app)
 
         while self.is_exist_pop_dialog():
+            # self.wait(3) # ??? seems no need here, put wait in is_exist_pop_dialog
             try:
                 title = self._get_pop_dialog_title()
             except pywinauto.findwindows.ElementNotFoundError:
