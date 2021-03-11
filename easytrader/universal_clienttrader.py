@@ -57,4 +57,5 @@ class UniversalClientTrader(clienttrader.BaseLoginClientTrader):
 
         self._close_prompt_windows()
         self._main = self._app.window(title="网上股票交易系统5.0")
+        self._main.maximize()
 
