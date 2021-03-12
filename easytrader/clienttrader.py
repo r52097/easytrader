@@ -149,18 +149,21 @@ class ClientTrader(IClientTrader):
     @property
     def position(self):
         self._switch_left_menus(["查询[F4]", "资金股票"])
+        self.wait(5)
 
         return self._get_grid_data(self._config.COMMON_GRID_CONTROL_ID)
 
     @property
     def today_entrusts(self):
         self._switch_left_menus(["查询[F4]", "当日委托"])
+        self.wait(5)
 
         return self._get_grid_data(self._config.COMMON_GRID_CONTROL_ID)
 
     @property
     def today_trades(self):
         self._switch_left_menus(["查询[F4]", "当日成交"])
+        self.wait(5)
 
         return self._get_grid_data(self._config.COMMON_GRID_CONTROL_ID)
 
@@ -168,6 +171,7 @@ class ClientTrader(IClientTrader):
     def cancel_entrusts(self):
         self.refresh()
         self._switch_left_menus(["撤单[F3]"])
+        self.wait(5)
 
         return self._get_grid_data(self._config.COMMON_GRID_CONTROL_ID)
 
@@ -327,6 +331,7 @@ class ClientTrader(IClientTrader):
 
     def auto_ipo(self):
         self._switch_left_menus(self._config.AUTO_IPO_MENU_PATH)
+        self.wait(5)
 
         stock_list = self._get_grid_data(self._config.COMMON_GRID_CONTROL_ID)
 
@@ -353,6 +358,7 @@ class ClientTrader(IClientTrader):
 
     def auto_cb(self):
         self._switch_left_menus(self._config.AUTO_CB_MENU_PATH)
+        self.wait(5)
 
         stock_list = self._get_grid_data(self._config.COMMON_GRID_CONTROL_ID)
 
