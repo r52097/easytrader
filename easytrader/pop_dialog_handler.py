@@ -2,6 +2,7 @@
 import re
 import time
 from typing import Optional
+from datetime import datetime
 
 from easytrader import exceptions
 from easytrader.utils.perf import perf_clock
@@ -51,6 +52,9 @@ class PopDialogHandler:
 
     def _submit_by_shortcut(self):
         self._set_foreground(self._app.top_window())
+        ### wait until time at "XX:00"
+        while datetime.utcnow().second !=0:
+            pass
         self._app.top_window().type_keys("%Y", set_foreground=False)
 
     def _close(self):
