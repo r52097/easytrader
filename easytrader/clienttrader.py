@@ -333,22 +333,7 @@ class ClientTrader(IClientTrader):
         self._switch_left_menus(self._config.AUTO_IPO_MENU_PATH)
         self.wait(5)
 
-        stock_list = self._get_grid_data(self._config.COMMON_GRID_CONTROL_ID)
-
-        if len(stock_list) == 0:
-            return {"message": "今日无新股"}
-        invalid_list_idx = [
-            i for i, v in enumerate(stock_list) if v[self.config.AUTO_IPO_NUMBER] <= 0
-        ]
-
-        if len(stock_list) == len(invalid_list_idx):
-            return {"message": "没有发现可以申购的新股"}
-
         self._click(self._config.AUTO_IPO_SELECT_ALL_BUTTON_CONTROL_ID)
-        self.wait(0.1)
-
-        for row in invalid_list_idx:
-            self._click_grid_by_row(row)
         self.wait(0.1)
 
         self._click(self._config.AUTO_IPO_BUTTON_CONTROL_ID)
