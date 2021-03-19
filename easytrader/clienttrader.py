@@ -134,28 +134,36 @@ class ClientTrader(IClientTrader):
     def _get_balance_from_statics(self):
         result = {}
         for key, control_id in self._config.BALANCE_CONTROL_ID_GROUP.items():
-            result[key] = float(
-                self._main.child_window(
-                    control_id=control_id, class_name="Static"
-                ).window_text()
-            )
+            while True:
+                try:
+                    result[key] = float(
+                        self._main.child_window(
+                            control_id=control_id, class_name="Static"
+                        ).window_text()
+                    )
+                    break
+                except:
+                    self.wait(1)
         return result
 
     @property
     def position(self):
         self._switch_left_menus(["查询[F4]", "资金股票"])
+        self.wait(5)
 
         return self._get_grid_data(self._config.COMMON_GRID_CONTROL_ID)
 
     @property
     def today_entrusts(self):
         self._switch_left_menus(["查询[F4]", "当日委托"])
+        self.wait(5)
 
         return self._get_grid_data(self._config.COMMON_GRID_CONTROL_ID)
 
     @property
     def today_trades(self):
         self._switch_left_menus(["查询[F4]", "当日成交"])
+        self.wait(5)
 
         return self._get_grid_data(self._config.COMMON_GRID_CONTROL_ID)
 
@@ -163,6 +171,7 @@ class ClientTrader(IClientTrader):
     def cancel_entrusts(self):
         self.refresh()
         self._switch_left_menus(["撤单[F3]"])
+        self.wait(5)
 
         return self._get_grid_data(self._config.COMMON_GRID_CONTROL_ID)
 
@@ -322,23 +331,9 @@ class ClientTrader(IClientTrader):
 
     def auto_ipo(self):
         self._switch_left_menus(self._config.AUTO_IPO_MENU_PATH)
-
-        stock_list = self._get_grid_data(self._config.COMMON_GRID_CONTROL_ID)
-
-        if len(stock_list) == 0:
-            return {"message": "今日无新股"}
-        invalid_list_idx = [
-            i for i, v in enumerate(stock_list) if v[self.config.AUTO_IPO_NUMBER] <= 0
-        ]
-
-        if len(stock_list) == len(invalid_list_idx):
-            return {"message": "没有发现可以申购的新股"}
+        self.wait(5)
 
         self._click(self._config.AUTO_IPO_SELECT_ALL_BUTTON_CONTROL_ID)
-        self.wait(0.1)
-
-        for row in invalid_list_idx:
-            self._click_grid_by_row(row)
         self.wait(0.1)
 
         self._click(self._config.AUTO_IPO_BUTTON_CONTROL_ID)
@@ -359,7 +354,7 @@ class ClientTrader(IClientTrader):
 
     @perf_clock
     def is_exist_pop_dialog(self):
-        self.wait(0.5)  # wait dialog display
+        self.wait(3)  # wait dialog display
         try:
             return (
                 self._main.wrapper_object() != self._app.top_window().wrapper_object()
@@ -397,13 +392,13 @@ class ClientTrader(IClientTrader):
         self._app.kill()
 
     def _close_prompt_windows(self):
-        self.wait(1)
+        self.wait(5)
         for window in self._app.windows(class_name="#32770", visible_only=True):
             title = window.window_text()
             if title != self._config.TITLE:
-                logging.info("close " + title)
+                # logging.info("close " + title)
                 window.close()
-                self.wait(0.2)
+                self.wait(1)
         self.wait(1)
 
     def close_pormpt_window_no_wait(self):
@@ -452,7 +447,7 @@ class ClientTrader(IClientTrader):
         self._type_edit_control_keys(self._config.TRADE_SECURITY_CONTROL_ID, code)
 
         # wait security input finish
-        self.wait(0.1)
+        self.wait(0.5)
 
         # 设置交易所
         if security.lower().startswith("sz"):
@@ -460,7 +455,7 @@ class ClientTrader(IClientTrader):
         if security.lower().startswith("sh"):
             self._set_stock_exchange_type("上海Ａ股")
 
-        self.wait(0.1)
+        self.wait(0.5)
 
         self._type_edit_control_keys(
             self._config.TRADE_PRICE_CONTROL_ID,
