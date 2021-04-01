@@ -179,6 +179,8 @@ class HTZQ(CommonConfig):
 
     AUTO_IPO_NUMBER = '可申购数量'
 
+    AUTO_CB_MENU_PATH = ["新股申购", "可转债申购"]
+    AUTO_CB_SECURITY = '证券代码'
 
 class UNIVERSAL(CommonConfig):
     DEFAULT_EXE_PATH = r"c:\\ths\\xiadan.exe"

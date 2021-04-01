@@ -346,6 +346,18 @@ class ClientTrader(IClientTrader):
 
         return self._handle_pop_dialogs()
 
+    def get_new_cb(self):
+        self._switch_left_menus(self._config.AUTO_CB_MENU_PATH)
+        self.wait(5)
+
+        stock_list = self._get_grid_data(self._config.COMMON_GRID_CONTROL_ID)
+
+        cb_list = []
+        if len(stock_list) != 0:
+            cb_list = [ cb[self.config.AUTO_CB_SECURITY] for cb in stock_list ]
+
+        return cb_list
+
     def _click_grid_by_row(self, row):
         x = self._config.COMMON_GRID_LEFT_MARGIN
         y = (
