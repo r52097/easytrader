@@ -338,8 +338,9 @@ class ClientTrader(IClientTrader):
         if len(stock_list) == 0:
             return {"message": "今日无新股"}
 
-        self._click(self._config.AUTO_IPO_SELECT_ALL_BUTTON_CONTROL_ID)
-        self.wait(0.1)
+        if self._app.top_window().child_window(control_id=self._config.AUTO_IPO_SELECT_ALL_BUTTON_CONTROL_ID, class_name="Button").element_info.name != "全部清除" :
+            self._click(self._config.AUTO_IPO_SELECT_ALL_BUTTON_CONTROL_ID)
+            self.wait(0.1)
 
         self._click(self._config.AUTO_IPO_BUTTON_CONTROL_ID)
         self.wait(0.1)
